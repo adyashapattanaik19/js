@@ -6,7 +6,6 @@ function reversestring(str){
     }
     return newstr;
   }
-  //const a =['hello','world']
   const a = prompt("Enter the array: ")
   const text = a.toString();
   const result = reversestring(text);
