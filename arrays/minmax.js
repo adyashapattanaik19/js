@@ -5,11 +5,11 @@ function findMinMax() {
 
 	for (let item of Arr) {
 
-		// Find minimum value
+		
 		if (item < minValue)
 			minValue = item;
 
-		// Find maximum value
+	
 		if (item > maxValue)
 			maxValue = item;
 	}
