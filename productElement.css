@@ -1,0 +1,18 @@
+.product {
+    border: 1px solid #ccc;
+    margin: 10px;
+    padding: 10px;
+    width: 200px;
+    text-align: center;
+  }
+  .product img {
+    max-width: 100%;
+    height: auto;
+  }
+  .title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .price {
+    font-size: 16px;
+  }
