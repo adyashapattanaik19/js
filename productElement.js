@@ -30,23 +30,24 @@ class ProductElement extends HTMLElement {
     return this._price;
   }
 
-  
-
-  
+  view() {
+    return `
+      <div class="product">
+        <img src="${this._image}" alt="${this._title}">
+        <div class="title">${this._title}</div>
+        <div class="price">${parseFloat(this._price).toFixed(2)}</div>
+        
+      </div>
+    `;
+  }
 
   render() {
     if (this._image && this._title && this._price) {
-      this.innerHTML = `
-        
-        <div class="product">
-          <img src="${this._image}" alt="${this._title}">
-          <div class="title">${this._title}</div>
-          <div class="price">$${parseFloat(this._price).toFixed(2)}</div>
-          <button class="add-to-cart" data-id="${this.getAttribute('data-id')}">Add To Cart</button>
-        </div>
-      `;
+      this.innerHTML = this.view();
+
+      this.querySelector("img").src = this._image;
     }
   }
 }
 
-customElements.define('product-element', ProductElement);
+customElements.define("product-element", ProductElement);
