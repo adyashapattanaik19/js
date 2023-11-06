@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let products = [];
   let currentPage = 1;
   const itemsPerPage = 3;
+  let sidebarOpen = false;
 
   function fetchProducts() {
     fetch("https://fakestoreapi.com/products")
@@ -78,11 +79,18 @@ document.addEventListener("DOMContentLoaded", function () {
   fetchProducts();
 
   closeSidebar.addEventListener("click", () => {
-    sidebar.style.right = "-250px";
+    closeSidebarFunction();
   });
+  function closeSidebarFunction() {
+    sidebar.style.right = "-250px";
+    sidebarOpen = false;
+  }
 
   function openSidebar(product) {
-    sidebar.style.right = "0";
+    if (!sidebarOpen) {
+      sidebar.style.right = "0";
+      sidebarOpen = true;
+    }
     if (product && product.image && product.title && product.price) {
       const productInSidebar = document.createElement("div");
       productInSidebar.className = "product-in-sidebar";
@@ -102,10 +110,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (event.target.classList.contains("add-to-cart")) {
       openSidebar();
     }
-  });
-
-  closeSidebar.addEventListener("click", () => {
-    sidebar.style.right = "-250px";
   });
   function updateSidebar() {
     cartItems.innerHTML = "";
