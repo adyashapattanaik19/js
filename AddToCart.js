@@ -1,9 +1,9 @@
- export class ShoppingCart {
+export class ShoppingCart {
   constructor(updateCallback) {
     this.cart = [];
     this.updateCallback=updateCallback;
   }
-  addToCart(product) {
+ addToCart(product) {
     const existingCartItem = this.cart.find((item) => item.id === product.id);
     if (existingCartItem) {
       existingCartItem.quantity += 1;
@@ -12,14 +12,14 @@
       this.cart.push(product);
     } 
   }
-  increaseQuantity(itemId) {
+increaseQuantity(itemId) {
     const cartItem = this.cart.find((item) => item.id === itemId);
     if (cartItem) {
       cartItem.quantity += 1;
       this.updateCallback();
     } 
   }
-  decreaseQuantity(itemId) {
+decreaseQuantity(itemId) {
     const cartItem = this.cart.find((item) => item.id === itemId);
     if (cartItem && cartItem.quantity > 1) {
       cartItem.quantity -= 1;
