@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const productList = document.getElementById("product-list");
   const sidebar = document.getElementById("sidebar");
   const closeSidebar = document.getElementById("close-sidebar");
-  const shoppingCart = new ShoppingCart();
+  const shoppingCart = new ShoppingCart(updateSidebar);
   let products = [];
   let currentPage = 1;
   const itemsPerPage = 3;
@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
           calculateTotalPrice();
         }
       });
+
       productElement.appendChild(addToCartButton);
 
       productList.appendChild(productElement);
@@ -75,22 +76,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   fetchProducts();
-
-  cartItems.addEventListener("click", (event) => {
-    const target = event.target;
-
-    if (target.classList.contains("increase-quantity")) {
-      const itemId = target.getAttribute("dataId");
-      shoppingCart.increaseQuantity(itemId);
-      updateSidebar();
-      calculateTotalPrice();
-    } else if (target.classList.contains("decrease-quantity")) {
-      const itemId = target.getAttribute("dataId");
-      shoppingCart.decreaseQuantity(itemId);
-      updateSidebar();
-      calculateTotalPrice();
-    }
-  });
 
   closeSidebar.addEventListener("click", () => {
     sidebar.style.right = "-250px";
@@ -127,41 +112,51 @@ document.addEventListener("DOMContentLoaded", function () {
     let total = 0;
 
     shoppingCart.cart.forEach((item) => {
-      const price = parseFloat(item.price);
-      if (!isNaN(price)) {
-        let quantity = item.quantity;
-        if (quantity < 1) {
-          quantity = 1;
-        }
-
+      const quantity = item.quantity;
+      if (quantity >= 1) {
         const cartItem = document.createElement("div");
         cartItem.className = "cart-item";
         cartItem.innerHTML = `
-    <div class="cart-item">
-      <img src="${item.image}" alt="${
-          item.title
-        }" style="max-width: 60px; max-height: 60px;">
-      <div class="cart-details">
-        <div class="title">${item.title}</div>
-        <div class="price">${(price * quantity).toFixed(2)} x 
-          <span class="quantity">${quantity}</span>
-          <button class="increase-quantity" dataId="${item.id}">+</button>
-          <button class="decrease-quantity" dataId="${item.id}">-</button>
-        </div>
-      </div>
-    </div>
-  `;
+          <div class="cart-item">
+            <img src="${item.image}" alt="${item.title}" style="max-width: 60px; max-height: 60px;">
+            <div class="cart-details">
+              <div class="title">${item.title}</div>
+              <div class="quantity">Quantity: ${quantity}</div>
+              <button class="increase-quantity" dataId="${item.id}">+</button>
+              <button class="decrease-quantity" dataId="${item.id}">-</button>
+            </div>
+          </div>
+        `;
+        const quantityElement = cartItem.querySelector(".quantity");
+
+        const increaseButton = cartItem.querySelector(".increase-quantity");
+        increaseButton.addEventListener("click", () => {
+          const itemId = item.id;
+          shoppingCart.increaseQuantity(itemId);
+
+          quantityElement.textContent = `Quantity: ${item.quantity}`;
+          updateSidebar();
+          calculateTotalPrice();
+        });
+        const decreaseButton = cartItem.querySelector(".decrease-quantity");
+        decreaseButton.addEventListener("click", () => {
+          const itemId = item.id;
+          shoppingCart.decreaseQuantity(itemId);
+
+          quantityElement.textContent = `Quantity: ${item.quantity}`;
+          updateSidebar();
+          calculateTotalPrice();
+        });
         cartItems.appendChild(cartItem);
-        total += price * quantity;
+        total += quantity;
       }
     });
 
     calculateTotalPrice();
   }
-
   function calculateTotalPrice() {
-    console.log("calculateTotalPrice function called");
     let total = 0;
+
     shoppingCart.cart.forEach((item) => {
       const price = parseFloat(item.price);
       if (!isNaN(price)) {
