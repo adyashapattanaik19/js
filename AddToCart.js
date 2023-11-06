@@ -1,6 +1,7 @@
  export class ShoppingCart {
-  constructor() {
+  constructor(updateCallback) {
     this.cart = [];
+    this.updateCallback=updateCallback;
   }
   addToCart(product) {
     const existingCartItem = this.cart.find((item) => item.id === product.id);
@@ -15,7 +16,7 @@
     const cartItem = this.cart.find((item) => item.id === itemId);
     if (cartItem) {
       cartItem.quantity += 1;
-      updateSidebar();
+      this.updateCallback();
     } 
   }
   decreaseQuantity(itemId) {
@@ -28,10 +29,6 @@
         this.cart.splice(itemIndex, 1);
       }
     }
-    updateSidebar();
+    this.updateCallback();
   }
 }
-  
-
-
-
